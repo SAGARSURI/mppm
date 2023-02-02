@@ -3,9 +3,13 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 import 'package:mppm/util.dart';
-import 'package:yaml/yaml.dart';
+import 'package:mppm/yaml_parser.dart';
 
 class InitCommand extends Command {
+  final YamlParser _yamlParser;
+
+  InitCommand(this._yamlParser);
+
   @override
   String get description => 'Prepare your project to use mppm';
 
@@ -19,29 +23,11 @@ class InitCommand extends Command {
       exit(2);
     }
 
-    if (!exists('mppm.yaml')) {
-      touch('mppm.yaml', create: true);
-      _writeContent();
+    if (!exists(mppmFilePath)) {
+      touch(mppmFilePath, create: true);
+      _yamlParser.writeContent();
     } else {
-      _updateContent();
+      _yamlParser.updateContent();
     }
   }
-}
-
-//Write the template to yaml file
-void _writeContent() {
-  final pubspec = File('pubspec.yaml').readAsStringSync();
-  final name = loadYaml(pubspec)['name'];
-  'mppm.yaml'.write(mppmTemplate(name));
-}
-
-//Overwrite the existing yaml file if user re-execute the init command.
-//Before overwriting the user will be asked for a confirmation.
-void _updateContent() {
-  if (exists('mppm.yaml') &&
-      confirm(
-          'Warning: mppm.yaml will be overwritten. Do you wanna proceed?')) {
-    delete('mppm.yaml');
-  }
-  _writeContent();
 }

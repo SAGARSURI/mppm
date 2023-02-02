@@ -1,7 +1,10 @@
 import 'package:dcli/dcli.dart';
 
+const mppmFilePath = 'mppm.yaml';
+const pubspecFileName = 'pubspec.yaml';
+
 bool isDartProject() {
-  return exists('pubspec.yaml');
+  return exists('pubspec.yaml') && exists('lib');
 }
 
 String mppmTemplate(String projectName) {

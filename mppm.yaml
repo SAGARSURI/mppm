@@ -1,0 +1,10 @@
+name: mppm
+packages: 
+  - packages/**
+common_dependencies: 
+  path: 1.2.0
+  uri: 1.1.0
+common_dev_dependencies: 
+  mocktail: any
+  yaml_writer:
+    path: ../../dart/yaml_writer
